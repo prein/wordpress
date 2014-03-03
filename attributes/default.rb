@@ -31,9 +31,15 @@ default['wordpress']['db']['pass'] = nil
 default['wordpress']['db']['prefix'] = 'wp_'
 default['wordpress']['db']['host'] = 'localhost'
 
+default['wordpress']['source_sql'] = false 
+
 default['wordpress']['allow_multisite'] = false
 
 default['wordpress']['server_aliases'] = [node['fqdn']]
+
+default['wordpress']['use_salt'] = true
+
+default['wordpress']['configuration-data-bag'] = "wordpress-sites"
 
 # Languages
 default['wordpress']['languages']['lang'] = ''
@@ -62,8 +68,10 @@ if platform_family?('windows')
   default['wordpress']['parent_dir'] = "#{ENV['SystemDrive']}\\inetpub"
   default['wordpress']['dir'] = "#{node['wordpress']['parent_dir']}\\wordpress"
   default['wordpress']['url'] = "https://wordpress.org/wordpress-#{node['wordpress']['version']}.zip"
+  default['wordpress']['secretpath'] = "#{ENV['SystemDrive']}/etc/chef/wp_databag_secret"
 else
   default['wordpress']['parent_dir'] = '/var/www'
   default['wordpress']['dir'] = "#{node['wordpress']['parent_dir']}/wordpress"
   default['wordpress']['url'] = "https://wordpress.org/wordpress-#{node['wordpress']['version']}.tar.gz"
+  default['wordpress']['secretpath'] = "/etc/chef/wp_databag_secret"
 end

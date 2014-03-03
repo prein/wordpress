@@ -60,4 +60,15 @@ if is_local_host? db['host']
     action        :grant
   end
 
+  if node['wordpress']['source_sql'] && node['wordpress']['source_sql'] != ""
+    cookbook_file "/tmp/#{node['wordpress']['source_sql']}" do
+      source node['wordpress']['source_sql']
+    end
+    
+    mysql_database db['name'] do
+      connection    mysql_connection_info
+      sql           { ::File.open("/tmp/#{node['wordpress']['source_sql']}").read }
+      action        :query
+    end
+  end
 end
